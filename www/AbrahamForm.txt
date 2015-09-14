@@ -1,0 +1,19 @@
+%META:TOPICINFO{author="JoseAbrahamRojasLopez" date="1441835346" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICPARENT{name="AbrahamApp"}%
+---+!! [[AbrahamDB][DB]] &#187; Form Definition
+
+| *Name:*| *Type:* | *Size* | *Values:* | *Tooltip message:* |
+| CampoA | text| 50|  | H |
+| CampoB | text | 40 |  | H |
+| CampoC | text | 40 |  | H |
+| CampoD | text | 40 |  | H |
+| CampoE | text | 40 |  | H |
+
+
+__Related:__ AbrahamDB, AbrahamTemplate, AbrahamHeader, AbrahamNew
+
+-- %USERSIG{JoseAbrahamRojasLopez - 2015-09-09}%
+
+---++ Comments
+
+%COMMENT%

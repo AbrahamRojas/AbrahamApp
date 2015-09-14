@@ -1,0 +1,18 @@
+%META:TOPICINFO{author="PabloLopez" date="1441986980" format="1.1" version="1.2"}%
+%META:TOPICPARENT{name="AbrahamDB"}%
+%INCLUDE{AbrahamHeader}%
+
+__Back to:__ AbrahamDB
+
+-- %USERSIG{JoseAbrahamRojasLopez - 2015-09-09}%
+
+---++ Comments
+
+%COMMENT%
+
+%META:FORM{name="AbrahamForm"}%
+%META:FIELD{name="CampoA" attributes="" title="CampoA" value="Eric Baez"}%
+%META:FIELD{name="CampoB" attributes="" title="CampoB" value="Puebla"}%
+%META:FIELD{name="CampoC" attributes="" title="CampoC" value="222345851"}%
+%META:FIELD{name="CampoD" attributes="" title="CampoD" value="222345851"}%
+%META:FIELD{name="CampoE" attributes="" title="CampoE" value="eric.baez@empowerlabs.com"}%

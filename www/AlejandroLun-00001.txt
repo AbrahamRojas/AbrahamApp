@@ -1,0 +1,14 @@
+%META:TOPICINFO{author="AlejandroLunaHernandez" date="1433364630" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="AlejandroAlumnosTemplateDB"}%
+%INCLUDE{AlejandroAlumnosTemplateHeader}%
+
+---++ Comment
+
+%COMMENT%
+
+__Back to:__ AlejandroAlumnosTemplateDB
+
+%META:FORM{name="AlejandroAlumnosTemplateForm"}%
+%META:FIELD{name="Name" attributes="" title="Name" value="asdas"}%
+%META:FIELD{name="Last" attributes="" title="Last" value="dasd"}%
+%META:FIELD{name="Age" attributes="" title="Age" value="23"}%

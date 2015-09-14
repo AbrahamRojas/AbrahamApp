@@ -1,0 +1,18 @@
+%META:TOPICINFO{author="JoseAbrahamRojasLopez" date="1441987114" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICPARENT{name="AbrahamDB"}%
+%INCLUDE{AbrahamHeader}%
+
+__Back to:__ AbrahamDB
+
+-- %USERSIG{JoseAbrahamRojasLopez - 2015-09-09}%
+
+---++ Comments
+
+%COMMENT%
+
+%META:FORM{name="AbrahamForm"}%
+%META:FIELD{name="CampoA" attributes="" title="CampoA" value="Juan Perez"}%
+%META:FIELD{name="CampoB" attributes="" title="CampoB" value="Calle universidad numero 25"}%
+%META:FIELD{name="CampoC" attributes="" title="CampoC" value="2222302176"}%
+%META:FIELD{name="CampoD" attributes="" title="CampoD" value="2224987541"}%
+%META:FIELD{name="CampoE" attributes="" title="CampoE" value="asesor.abc@empowerlabs.com"}%

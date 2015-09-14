@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+             <script type="text/javascript" src="cordova.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/estilo.css" />
+          <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+<script src="Alertas/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="Alertas/sweetalert.css">
+<link rel="stylesheet" type="text/css" href="fonts.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+            function Confirmar() {
+                swal({ title: "¿Estas seguro que deseas agregar este contacto?",
+                    text: "Estas apunto de insertar un nuevo contacto",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "¡Si,Estoy seguro!",
+                    cancelButtonText: "¡No, Deseo cancelarlo!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                                    function (isConfirm) {
+                                        if (isConfirm) {
+                                            swal("¡Insertado correctamente!", "Tu contacto ha sido guardado de manera exitosa", "success");
+                                        }
+                                        else {
+                                            swal("Cancelado",
+                                    "Tu contacto no ha sido guardado",
+                                    "error");
+                                        }
+                                    });
+
+            }
+
+            $(document).ready(main);
+            var contador = 1;
+
+            function main() {
+                $('.menu_bar').click(function () {
+                    //$('nav').toggle(); 
+
+                    if (contador == 1) {
+                        $('nav').animate({
+                            left: '0'
+                        });
+                        contador = 0;
+                    } else {
+                        contador = 1;
+                        $('nav').animate({
+                            left: '-100%'
+                        });
+                    }
+
+                });
+
+            };
+
+
+
+            function Mostrar() {
+                $.ajax({
+                    type: "POST",
+                    url: "WebService.php",
+                    async: true,
+                    success: function (datos) {
+                        var dataJson = eval(datos);
+                                        var tabla = '<table border=1   >'
+                                            tabla += '<tr style="color:#fff; " >' + '<td>' + 'Nombre'+ '</td>' + '<td>' + 'Direccion'+ '</td>' + '<td>' +'Telefono'+ '</td>' + '<td>' + 'Celular' + '</td>' + '<td>' + 'Correo Electronico'+ '</td>' + '</tr>';
+
+                        for (var i in dataJson) {
+                                            tabla += '<tr>' + '<td>' + dataJson[i].CampoA + '</td>' + '<td>' + dataJson[i].CampoB + '</td>' + '<td>' + dataJson[i].CampoC + '</td>' + '<td>' + dataJson[i].CampoD + '</td>' + '<td>' + dataJson[i].CampoE + '</td>' + '</tr>';
+
+                        }
+                         tabla += '</table>';
+
+                document.getElementById('divtablas').innerHTML = tabla;
+                
+                    },
+                    error: function (obj, error, objError) {
+                        //avisar que ocurrió un error
+                    }
+                });
+               
+            }
+        </script>
+
+
+
+        <title>Agenda de contactos</title>
+    </head>
+    <body>
+     <!----Aqui inicia el contenido 1------->
+            <!----Aqui inicia el menu------->
+        <div id="encabezado">
+                                    <header>
+		<div class="menu_bar">
+			<a  class="bt-menu"><span class="icon-list"></span>Menu</a>
+		</div>
+		<nav>
+			<ul>
+				<li><a href="#contenido1"><span class="icon-home"></span>Inicio</a></li>
+				<li><a href="#contenido2"><span class="icon-pencil2"></span>Nuevo Contacto</a></li>
+				<li><a href="#contenido3" onclick="Mostrar();" ><span class="icon-profile"></span>Contactos</a></li>
+			</ul>
+		</nav>
+        </header>
+        </div>
+
+ 
+    <!----Aqui finaliza el menu------->
+    <div id="contenido1">
+            <img src="img/logoempresa.png" id="fondo"/>
+ 
+    <!----Aqui inicia el slider de fondo------->
+   <!----Aqui finaliza el slider de fondo------->
+     
+        </div>
+    <!----Aqui finaliza el contenido 1------->
+
+
+    <div id="contenido2" class="panel" > 
+       <div id="cc"><!----Contenido que viene en el centr--->
+
+<div class="form-group has-success">
+  <label class="control-label" for="inputSuccess">Nombre</label>
+  <input type="text" class="form-control" id="Nombre" placeholder="Nombre">
+  <label class="control-label" for="inputSuccess">Direccion</label>
+  <input type="text" class="form-control" id="Direccion" placeholder="Direccion">
+      <label class="control-label" for="inputSuccess">Telefono</label>
+  <input type="text" class="form-control" id="Telefono" placeholder="Telefono">
+     <label class="control-label" for="inputSuccess">Celular</label>
+  <input type="text" class="form-control" id="Celular" placeholder="Celular">
+     <label class="control-label" for="inputSuccess">Correo</label>
+  <input type="text" class="form-control" id="Correo" placeholder="Correo">
+    <!-- Muestra el botón de forma destacada para descubrir fácilmente
+     el botón principal dentro de un grupo de botones -->
+<button type="button" class="btn btn-primary btn-lg" onclick="Confirmar();" >Insertar</button>
+
+</div>
+       </div>
+    </div>
+    <div id="contenido3" class="panel">
+    <div id="cc2" class="form-group has-success"><!----Contenido que viene en el centr---> 
+          
+       <div id='divtablas' >
+            </div>
+    </div>
+    </div>
+
+
+        <div id="pie">
+        </div> 
+    </body>
+</html>
