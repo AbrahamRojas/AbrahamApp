@@ -1,162 +1,243 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en">
     <head>
         <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="msapplication-tap-highlight" content="no" />
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-             <script type="text/javascript" src="cordova.js"></script>
-        <link rel="stylesheet" type="text/css" href="css/estilo.css" />
-          <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/jquery.min.js"></script>
-<script src="Alertas/sweetalert.min.js"></script>
+        <title></title>
+        <meta name="viewport" content="width=device-width"/>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <script src="Alertas/sweetalert.min.js"></script>
+ <script type="text/javascript" src="cordova.js"></script>
 <link rel="stylesheet" type="text/css" href="Alertas/sweetalert.css">
-<link rel="stylesheet" type="text/css" href="fonts.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <script type="text/javascript">
-            function Confirmar() {
-                swal({ title: "¿Estas seguro que deseas agregar este contacto?",
-                    text: "Estas apunto de insertar un nuevo contacto",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "¡Si,Estoy seguro!",
-                    cancelButtonText: "¡No, Deseo cancelarlo!",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-                },
-                                    function (isConfirm) {
-                                        if (isConfirm) {
-                                            swal("¡Insertado correctamente!", "Tu contacto ha sido guardado de manera exitosa", "success");
-                                        }
-                                        else {
-                                            swal("Cancelado",
-                                    "Tu contacto no ha sido guardado",
-                                    "error");
-                                        }
-                                    });
+     
+              <link rel='stylesheet' href='http://empowerlabs.com/archivos/Eric/EricTRansformation/Agenda/jquery-ui.min.css' /> <link href='http://empowerlabs.com/conf/archivos/Eric/EricTRansformation/Agenda/fullcalendar.css' rel='stylesheet' /> <link href='http://empowerlabs.com/conf/archivos/Eric/EricTRansformation/Agenda/fullcalendar.print.css' rel='stylesheet' media='print' /> <script src='http://empowerlabs.com/conf/archivos/Eric/EricTRansformation/Agenda/lib/moment.min.js'></script> <script src='http://empowerlabs.com/conf/archivos/Eric/EricTRansformation/Agenda/lib/jquery.min.js'></script> <script src='http://empowerlabs.com/conf/archivos/Eric/EricTRansformation/Agenda/fullcalendar.min.js'></script> <script src='http://empowerlabs.com/conf/archivos/Eric/EricTRansformation/Agenda/lang-all.js'></script> <script>
 
+   $(document).ready(function() {
+
+      ////////////////7
+      var currentLangCode = 'en';
+
+      // build the language selector's options
+      $.each($.fullCalendar.langs, function(langCode) {
+         $('#lang-selector').append(
+            $('<option/>')
+               .attr('value', langCode)
+               .prop('selected', langCode == currentLangCode)
+               .text(langCode)
+         );
+      });
+
+      // rerender the calendar when the selected option changes
+      $('#lang-selector').on('change', function() {
+         if (this.value) {
+            currentLangCode = this.value;
+            $('#calendar').fullCalendar('destroy');
+            renderCalendar();
+         }
+      });
+
+      
+      var currentTimezone = false;
+
+      // load the list of available timezones
+      $.getJSON('http://www.empowerlabs.com/GestorActvidades/getActEvent.php?Agent=Main.PabloLopez', function(timezones) {
+         $.each(timezones, function(i, timezone) {
+            if (timezone != 'UTC') { // UTC is already in the list
+               $('#timezone-selector').append(
+                  $("<option/>").text(timezone).attr('value', timezone)
+               );
             }
+         });
+      });
 
-            $(document).ready(main);
-            var contador = 1;
+      // when the timezone selector changes, rerender the calendar
+      $('#timezone-selector').on('change', function() {
+         currentTimezone = this.value || false;
+         $('#calendar').fullCalendar('destroy');
+         renderCalendar();
+      });
 
-            function main() {
-                $('.menu_bar').click(function () {
-                    //$('nav').toggle(); 
+      function renderCalendar() {
+         $('#calendar').fullCalendar({
+            defaultView: 'agendaDay',
+            header: {
+               left: 'prev,next today',
+               center: 'title',
+               right: 'agendaDay,agendaWeek,month'
+            },
+            lang: currentLangCode,
+            timezone: currentTimezone,
+            editable: true,
+            eventLimit: true, // allow "more" link when too many events
+            events: {
+               url: 'http://www.empowerlabs.com/GestorActvidades/getActEvent.php?Agent=Main.PabloLopez',
+               error: function() {
+                  $('#script-warning').show();
+               }
+            },
+            loading: function(bool) {
+               $('#loading').toggle(bool);
+            },
+            eventRender: function(event, el) {
+               // render the timezone offset below the event title
+               if (event.start.hasZone()) {
+                  el.find('.fc-title').after(
+                     $('<div class="tzo"/>').text(event.start.format('Z'))
+                  );
+               }
+            }
+         });
+      }
 
-                    if (contador == 1) {
-                        $('nav').animate({
-                            left: '0'
-                        });
-                        contador = 0;
-                    } else {
-                        contador = 1;
-                        $('nav').animate({
-                            left: '-100%'
-                        });
-                    }
+      renderCalendar();
+   });
 
-                });
+</script> 
+        <style>
 
-            };
+   body {
+      margin: 0;
+      padding: 0;
+      font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+      font-size: 14px;
+   }
+
+   #top {
+      background: #eee;
+      border-bottom: 1px solid #ddd;
+      padding: 0 10px;
+      line-height: 40px;
+      font-size: 12px;
+   }
+   .left { float: left }
+   .right { float: right }
+   .clear { clear: both }
+
+   #script-warning, #loading { display: none }
+   #script-warning { font-weight: bold; color: red }
+
+   #calendar {
+    
+      margin: 1px auto;
+      padding: 0 7px;
+   }
+
+   .tzo {
+      color: #000;
+   }
+
+</style>
 
 
+        <script>
 
-            function Mostrar() {
+            function Validar() {
+                var user = document.getElementById("nombre").value;
+                var pass = document.getElementById("pass").value;
                 $.ajax({
                     type: "POST",
-                    url: "http://www.empowerlabs.com/intellibanks/data/Sandbox/WebService.php",
+                    url: "Logueo.php",
                     async: true,
                     success: function (datos) {
                         var dataJson = eval(datos);
-                                        var tabla = '<table border=1   >'
-                                            tabla += '<tr style="color:#fff; " >' + '<td>' + 'Nombre'+ '</td>' + '<td>' + 'Direccion'+ '</td>' + '<td>' +'Telefono'+ '</td>' + '<td>' + 'Celular' + '</td>' + '<td>' + 'Correo Electronico'+ '</td>' + '</tr>';
-
+                        var validaruser = false;
+                        var validarpass = false;
                         for (var i in dataJson) {
-                                            tabla += '<tr>' + '<td>' + dataJson[i].CampoA + '</td>' + '<td>' + dataJson[i].CampoB + '</td>' + '<td>' + dataJson[i].CampoC + '</td>' + '<td>' + dataJson[i].CampoD + '</td>' + '<td>' + dataJson[i].CampoE + '</td>' + '</tr>';
+
+                            if (user == dataJson[i].arreglouser) {
+                                // alert("Si se encuentra usuario");
+                                validaruser = true;
+                                if (pass == dataJson[i].arreglopass) {
+                                    // alert("Si se encuentra usuario");
+                                    validarpass = true;
+                                    //  alert("Logueo correcto");
+
+                                } else { //alert("No esta"); 
+                                    //alert("Verifica tu contraseña");
+                                }
+                            } else { //alert("No esta"); 
+                                //alert("Verifica tu usuario");
+                            }
 
                         }
-                         tabla += '</table>';
-
-                document.getElementById('divtablas').innerHTML = tabla;
-                
+                        if (validaruser == false) {
+                            swal("Precaucion", "Verifique su usuario", "error");
+                        } else if (validarpass == false) {
+                            swal("Precaucion", "Verifique su contraseña", "error");
+                        }
+                        else if (validaruser == true && validarpass == true) {
+                            Enviar();
+                        }
                     },
                     error: function (obj, error, objError) {
-                        //avisar que ocurrió un error
                     }
                 });
-               
+            }
+            function ValidarNew() {
+                var user = document.getElementById("nombre").value;
+                var pass = document.getElementById("pass").value;
+                var resx = "";
+                var ruta = "http://www.empowerlabs.com/AppBSystemPromotoria/pass.php?usuario=" + user + "&pass=" + pass;
+                $.ajax({
+                    type: "POST",
+                    url: ruta,
+                    async: true,
+                    success: function (datos) {
+                        var dataJson = eval(datos);
+                        var validaruser = false;
+                        var validarpass = false;
+                        for (var i in dataJson) {
+
+                            resx = dataJson[i].logueo;
+                        }
+                         if (resx == "Usuario incorrecto") {
+                            swal("Precaución", "Verifique su usuario", "error");
+                        } else if (resx == "Pass incorrecta") {
+                            swal("Precaución", "Verifique su contraseña", "error");
+                        }
+                        else if (resx == "True") {
+                            //swal("Enviar", "Correcto", "error");
+                            Enviar();
+                        }
+                    },
+                    error: function (obj, error, objError) {
+                    }
+                });
             }
         </script>
-
-
-
-        <title>Agenda de contactos</title>
     </head>
     <body>
-     <!----Aqui inicia el contenido 1------->
-            <!----Aqui inicia el menu------->
-        <div id="encabezado">
-                                    <header>
-		<div class="menu_bar">
-			<a  class="bt-menu"><span class="icon-list"></span>Menu</a>
-		</div>
-		<nav>
-			<ul>
-				<li><a href="#contenido1"><span class="icon-home"></span>Inicio</a></li>
-				<li><a href="#contenido2"><span class="icon-pencil2"></span>Nuevo Contacto</a></li>
-				<li><a href="#contenido3" onclick="Mostrar();" ><span class="icon-profile"></span>Contactos</a></li>
-			</ul>
-		</nav>
-        </header>
-        </div>
-
- 
-    <!----Aqui finaliza el menu------->
-    <div id="contenido1">
-            <img src="img/logoempresa.png" id="fondo"/>
- 
-    <!----Aqui inicia el slider de fondo------->
-   <!----Aqui finaliza el slider de fondo------->
-     
-        </div>
-    <!----Aqui finaliza el contenido 1------->
+  
 
 
-    <div id="contenido2" class="panel" > 
-       <div id="cc"><!----Contenido que viene en el centr--->
-
-<div class="form-group has-success">
-  <label class="control-label" for="inputSuccess">Nombre</label>
-  <input type="text" class="form-control" id="Nombre" placeholder="Nombre">
-  <label class="control-label" for="inputSuccess">Direccion</label>
-  <input type="text" class="form-control" id="Direccion" placeholder="Direccion">
-      <label class="control-label" for="inputSuccess">Telefono</label>
-  <input type="text" class="form-control" id="Telefono" placeholder="Telefono">
-     <label class="control-label" for="inputSuccess">Celular</label>
-  <input type="text" class="form-control" id="Celular" placeholder="Celular">
-     <label class="control-label" for="inputSuccess">Correo</label>
-  <input type="text" class="form-control" id="Correo" placeholder="Correo">
-    <!-- Muestra el botón de forma destacada para descubrir fácilmente
-     el botón principal dentro de un grupo de botones -->
-<button type="button" class="btn btn-primary btn-lg" onclick="Confirmar();" >Insertar</button>
-
-</div>
+<div id="top" style="z-index: 2;">
+      <div class="left">      
+      </div>
+      <div class="right"> 
+         <span id="loading">loading...</span>
        </div>
+      <div class="clear"> 
+      </div>
+</div>
+<div data-role="page">
+    <div data-role="header" style="background:#dddddd;">
+        <h1 >Business System</h1>
     </div>
-    <div id="contenido3" class="panel">
-    <div id="cc2" class="form-group has-success"><!----Contenido que viene en el centr---> 
-          
-       <div id='divtablas' >
-            </div>
+    <div data-role="main" class="ui-content">
+        <input type="text" name="nombre" id="nombre" placeholder="Usuario (Intellibanks)">
+        <input type="password" name="pass" id="pass" placeholder="Contraseña">
+        <input type="button" value="Ingresar" onclick="ValidarNew();" >
     </div>
-    </div>
+</div> 
+<script type="text/javascript">
+                   function Enviar() {
+                       var nombre = document.getElementById("nombre").value;
+                       location.href = 'inicio.html?nombre='+nombre;
+                   }
+</script>
 
-
-        <div id="pie">
-        </div> 
+        
     </body>
 </html>
